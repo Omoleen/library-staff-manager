@@ -1,0 +1,86 @@
+@model StaffManagementN.Models.EmployeeDetailsViewModel
+
+@{
+    ViewData["Title"] = "Employee Details";
+}
+
+<h1 class="h3 mb-2 text-gray-800">Employee Details</h1>
+<p class="mb-4">Details for @Model.Employee.FirstName @Model.Employee.LastName.</p>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Employee Information</h6>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">First Name</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Employee.FirstName)</dd>
+                    <dt class="col-sm-4">Last Name</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Employee.LastName)</dd>
+                    <dt class="col-sm-4">Email</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Employee.Email)</dd>
+                    <dt class="col-sm-4">Role</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Employee.Role)</dd>
+                </dl>
+                <a asp-action="Edit" asp-route-id="@Model.Employee.EmployeeID" class="btn btn-primary">Edit</a>
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Assign New Shift</h6>
+            </div>
+            <div class="card-body">
+                <form asp-action="AssignShift" method="post">
+                    <input type="hidden" name="employeeId" value="@Model.Employee.EmployeeID"/>
+                    <div class="form-group">
+                        <select name="shiftId" class="form-control" asp-items="@(new SelectList(Model.AvailableShifts, "ShiftID", "StartDateTime"))"></select>
+                    </div>
+                    <div class="form-group mt-3">
+                        <input type="submit" value="Assign Shift" class="btn btn-primary"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Assigned Shifts</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model.AssignedShifts)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.StartDateTime)</td>
+                        <td>@Html.DisplayFor(modelItem => item.EndDateTime)</td>
+                        <td>
+                            <a asp-controller="Shift" asp-action="Details" asp-route-id="@item.ShiftID" class="btn btn-info btn-sm">Details</a>
+                            <form asp-action="UnassignShift" method="post" style="display:inline;">
+                                <input type="hidden" name="employeeId" value="@Model.Employee.EmployeeID"/>
+                                <input type="hidden" name="shiftId" value="@item.ShiftID"/>
+                                <button type="submit" class="btn btn-danger btn-sm">Unassign</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div> 

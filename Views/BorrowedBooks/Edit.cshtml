@@ -1,0 +1,73 @@
+@model StaffManagementN.Models.BorrowedBookModel
+
+@{
+    ViewData["Title"] = "Edit Borrowed Book Record";
+}
+
+<h1 class="h3 mb-2 text-gray-800">Edit Borrowed Book Record</h1>
+<p class="mb-4">Update the details for this borrowed book record.</p>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Borrowed Book Details</h6>
+    </div>
+    <div class="card-body">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="BorrowId" />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label class="control-label">Book</label>
+                        <select asp-for="BookId" class="form-control" asp-items="@(new SelectList(ViewBag.Books, "BookId", "Title"))">
+                            <option value="">Select a Book</option>
+                        </select>
+                        <span asp-validation-for="BookId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label class="control-label">Member</label>
+                        <select asp-for="MemberId" class="form-control" asp-items="@(new SelectList(ViewBag.Members, "MemberId", "FirstName", null, "LastName"))">
+                            <option value="">Select a Member</option>
+                        </select>
+                        <span asp-validation-for="MemberId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="BorrowDate" class="control-label"></label>
+                        <input asp-for="BorrowDate" type="date" class="form-control" />
+                        <span asp-validation-for="BorrowDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="DueDate" class="control-label"></label>
+                        <input asp-for="DueDate" type="date" class="form-control" />
+                        <span asp-validation-for="DueDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="ReturnDate" class="control-label"></label>
+                        <input asp-for="ReturnDate" type="date" class="form-control" />
+                        <span asp-validation-for="ReturnDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group mt-4">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

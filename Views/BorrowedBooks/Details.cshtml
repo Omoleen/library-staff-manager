@@ -1,0 +1,154 @@
+@model StaffManagementN.Models.BorrowedBookModel
+
+@{
+    ViewData["Title"] = "Borrowed Book Details";
+}
+
+<h1 class="h3 mb-2 text-gray-800">Borrowed Book Details</h1>
+<p class="mb-4">Details for this borrowed book record.</p>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Borrowing Information</h6>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="mb-3">Book Information</h5>
+                <dl class="row">
+                    <dt class="col-sm-4">Title</dt>
+                    <dd class="col-sm-8">
+                        <a asp-controller="Books" asp-action="Details" asp-route-id="@Model.Book.BookId">
+                            @Model.Book.Title
+                        </a>
+                    </dd>
+                    <dt class="col-sm-4">Author</dt>
+                    <dd class="col-sm-8">@Model.Book.Author</dd>
+                    <dt class="col-sm-4">ISBN</dt>
+                    <dd class="col-sm-8">@Model.Book.ISBN</dd>
+                </dl>
+
+                <h5 class="mb-3 mt-4">Member Information</h5>
+                <dl class="row">
+                    <dt class="col-sm-4">Name</dt>
+                    <dd class="col-sm-8">
+                        <a asp-controller="Members" asp-action="Details" asp-route-id="@Model.Member.MemberId">
+                            @Model.Member.FirstName @Model.Member.LastName
+                        </a>
+                    </dd>
+                    <dt class="col-sm-4">Email</dt>
+                    <dd class="col-sm-8">@Model.Member.Email</dd>
+                    <dt class="col-sm-4">Phone</dt>
+                    <dd class="col-sm-8">@Model.Member.PhoneNumber</dd>
+                </dl>
+            </div>
+
+            <div class="col-md-6">
+                <h5 class="mb-3">Borrowing Details</h5>
+                <dl class="row">
+                    <dt class="col-sm-4">Borrow Date</dt>
+                    <dd class="col-sm-8">@Model.BorrowDate.ToString("g")</dd>
+
+                    <dt class="col-sm-4">Processed By</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.ProcessedByEmployee != null)
+                        {
+                            <a asp-controller="Employee" asp-action="Details" asp-route-id="@Model.ProcessedByEmployee.EmployeeID">
+                                @Model.ProcessedByEmployee.FirstName @Model.ProcessedByEmployee.LastName
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Not recorded</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4">Borrowed During</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.BorrowedDuringShift != null)
+                        {
+                            <a asp-controller="Shift" asp-action="Details" asp-route-id="@Model.BorrowedDuringShift.ShiftID">
+                                Shift @Model.BorrowedDuringShift.ShiftID
+                                (@Model.BorrowedDuringShift.StartDateTime.ToString("g") - @Model.BorrowedDuringShift.EndDateTime.ToString("g"))
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">No shift recorded</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4">Due Date</dt>
+                    <dd class="col-sm-8">
+                        @Model.DueDate.ToString("g")
+                        @if (!Model.ReturnDate.HasValue && DateTime.Now > Model.DueDate)
+                        {
+                            <span class="badge bg-danger ms-2">Overdue</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4">Return Date</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.ReturnDate.HasValue)
+                        {
+                            @Model.ReturnDate.Value.ToString("g")
+                            if (Model.ReturnDate.Value > Model.DueDate)
+                            {
+                                <span class="badge bg-warning ms-2">Returned Late</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success ms-2">On Time</span>
+                            }
+                        }
+                        else
+                        {
+                            <span class="text-warning">Not Returned</span>
+                        }
+                    </dd>
+
+                    @if (Model.ReturnDate.HasValue)
+                    {
+                        <dt class="col-sm-4">Received By</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.ReceivedByEmployee != null)
+                            {
+                                <a asp-controller="Employee" asp-action="Details" asp-route-id="@Model.ReceivedByEmployee.EmployeeID">
+                                    @Model.ReceivedByEmployee.FirstName @Model.ReceivedByEmployee.LastName
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="text-muted">Not recorded</span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-4">Returned During</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.ReturnedDuringShift != null)
+                            {
+                                <a asp-controller="Shift" asp-action="Details" asp-route-id="@Model.ReturnedDuringShift.ShiftID">
+                                    Shift @Model.ReturnedDuringShift.ShiftID
+                                    (@Model.ReturnedDuringShift.StartDateTime.ToString("g") - @Model.ReturnedDuringShift.EndDateTime.ToString("g"))
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="text-muted">No shift recorded</span>
+                            }
+                        </dd>
+                    }
+                </dl>
+
+                <div class="mt-4">
+                    @if (!Model.ReturnDate.HasValue)
+                    {
+                        <a asp-action="Return" asp-route-id="@Model.BorrowId" class="btn btn-success me-2">Return Book</a>
+                    }
+                    <a asp-action="Edit" asp-route-id="@Model.BorrowId" class="btn btn-primary me-2">Edit</a>
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

@@ -1,0 +1,112 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row">
+        <div class="col-lg-8 mb-4">
+            <!-- Project Card Example -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">About This Project</h6>
+                </div>
+                <div class="card-body">
+                    <p>
+                        Welcome to the Integrated Staff Management -- Library Management CMS! This is a passion project by <strong>Omole Emmanuel Oreoluwa and Inobode Emmanuel</strong>, built to explore and learn the fundamentals of web development with ASP.NET Core.
+                    </p>
+                    <p>
+                        The goal was to create a functional Content Management System (CMS) for managing employees, their shifts, and the library, while putting into practice the core concepts of building a modern web application. As a beginner's project, the focus was on understanding the entire development lifecycle, from setting up the database to styling the front-end.
+                    </p>
+                    <p class="mb-0">
+                        Feel free to explore the Employee, Shift, and Library management sections!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 mb-4">
+             <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Quick Links</h6>
+                </div>
+                <div class="card-body">
+                   <div class="list-group">
+                        <a asp-controller="Employee" asp-action="Index" class="list-group-item list-group-item-action">View Employees</a>
+                        <a asp-controller="Shift" asp-action="Index" class="list-group-item list-group-item-action">View Shifts</a>
+                        <a asp-controller="Books" asp-action="Index" class="list-group-item list-group-item-action">View Books</a>
+                        <a asp-controller="BorrowedBooks" asp-action="Index" class="list-group-item list-group-item-action">View Borrowed Books</a>
+                        <a asp-controller="Members" asp-action="Index" class="list-group-item list-group-item-action">View Members</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Features & Technologies Implemented</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Backend Framework</h5>
+                                    <p class="card-text">Built with <strong>ASP.NET Core</strong>, using the Model-View-Controller (MVC) pattern to structure the application.</p>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Database</h5>
+                                    <p class="card-text">Using <strong>Entity Framework Core</strong> as the Object-Relational Mapper (ORM) to interact with a <strong>SQLite</strong> database.</p>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Data Management</h5>
+                                    <p class="card-text">Full CRUD (Create, Read, Update, Delete) functionality for both Employees and Shifts.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">API Endpoints</h5>
+                                    <p class="card-text">RESTful API controllers to expose data, allowing for potential future integrations with other services or a separate frontend.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Frontend Styling</h5>
+                                    <p class="card-text">Custom styling created with <strong>CSS</strong> and <strong>Bootstrap</strong> to create a unique and modern user interface, including the sidebar navigation and card-based layouts.</p>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Dependency Injection</h5>
+                                    <p class="card-text">Used .NET's built-in container to manage dependencies, such as injecting services into controllers, which promotes loosely coupled code.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

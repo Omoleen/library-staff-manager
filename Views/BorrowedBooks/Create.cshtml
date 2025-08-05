@@ -1,0 +1,146 @@
+@model StaffManagementN.Models.BorrowedBookModel
+
+@{
+    ViewData["Title"] = "Create Borrowed Book Record";
+    var currentShift = ViewBag.CurrentShift as StaffManagementN.Models.ShiftModel;
+    var currentShiftEmployees = ViewBag.CurrentShiftEmployees as IEnumerable<StaffManagementN.Models.EmployeeDto>;
+    var allEmployees = ViewBag.Employees as IEnumerable<StaffManagementN.Models.EmployeeDto>;
+}
+
+<h1 class="h3 mb-2 text-gray-800">Create Borrowed Book Record</h1>
+<p class="mb-4">Add a new borrowed book record to the system.</p>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Borrowed Book Details</h6>
+    </div>
+    <div class="card-body">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @if (currentShift != null)
+            {
+                <div class="alert alert-info mb-4">
+                    <strong>Current Shift:</strong> @currentShift.StartDateTime.ToString("g") - @currentShift.EndDateTime.ToString("g")
+                    <input type="hidden" asp-for="BorrowedDuringShiftId" value="@currentShift.ShiftID" />
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning mb-4">
+                    No active shift at the moment.
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label class="control-label">Book</label>
+                        <select asp-for="BookId" class="form-control" required>
+                            <option value="">Select a Book</option>
+                            @foreach (var book in ViewBag.Books)
+                            {
+                                if (Model?.BookId == book.BookId)
+                                {
+                                    <option value="@book.BookId" selected>@book.Title - @book.Author</option>
+                                }
+                                else
+                                {
+                                    <option value="@book.BookId">@book.Title - @book.Author</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="BookId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label class="control-label">Member</label>
+                        <select asp-for="MemberId" class="form-control" required>
+                            <option value="">Select a Member</option>
+                            @foreach (var member in ViewBag.Members)
+                            {
+                                if (Model?.MemberId == member.MemberId)
+                                {
+                                    <option value="@member.MemberId" selected>@member.FirstName @member.LastName</option>
+                                }
+                                else
+                                {
+                                    <option value="@member.MemberId">@member.FirstName @member.LastName</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="MemberId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="BorrowDate" class="control-label"></label>
+                        <input asp-for="BorrowDate" type="datetime-local" class="form-control" required />
+                        <span asp-validation-for="BorrowDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="DueDate" class="control-label"></label>
+                        <input asp-for="DueDate" type="datetime-local" class="form-control" required />
+                        <span asp-validation-for="DueDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    @if (currentShiftEmployees?.Any() == true)
+                    {
+                        <div class="form-group mb-3">
+                            <label class="control-label">Processing Employee (Current Shift)</label>
+                            <select asp-for="ProcessedByEmployeeId" class="form-control">
+                                <option value="">Select an Employee</option>
+                                @foreach (var employee in currentShiftEmployees)
+                                {
+                                    <option value="@employee.EmployeeID">@employee.FirstName @employee.LastName - @employee.Role</option>
+                                }
+                            </select>
+                            <span asp-validation-for="ProcessedByEmployeeId" class="text-danger"></span>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            No employees are assigned to the current shift.
+                        </div>
+                    }
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label class="control-label">Processing Employee (All Employees)</label>
+                        <select asp-for="ProcessedByEmployeeId" class="form-control" required>
+                            <option value="">Select an Employee</option>
+                            @foreach (var employee in allEmployees)
+                            {
+                                <option value="@employee.EmployeeID">@employee.FirstName @employee.LastName - @employee.Role</option>
+                            }
+                        </select>
+                        <span asp-validation-for="ProcessedByEmployeeId" class="text-danger"></span>
+                        <div class="form-text text-muted">
+                            Select the employee who is processing this borrowing.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group mt-4">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

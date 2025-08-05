@@ -1,0 +1,34 @@
+@model StaffManagementN.Models.EmployeeDto
+
+@{
+    ViewData["Title"] = "Delete Employee";
+}
+
+<h1 class="h3 mb-2 text-gray-800">Delete Employee</h1>
+<p class="mb-4">Are you sure you want to delete this employee?</p>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-danger">Confirm Deletion</h6>
+    </div>
+    <div class="card-body">
+        <h4 class="text-danger">@Model.FirstName @Model.LastName</h4>
+        <hr/>
+        <dl class="row">
+            <dt class="col-sm-3">First Name</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.FirstName)</dd>
+            <dt class="col-sm-3">Last Name</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.LastName)</dd>
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Email)</dd>
+            <dt class="col-sm-3">Role</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Role)</dd>
+        </dl>
+
+        <form asp-action="Delete" class="mt-4">
+            <input type="hidden" asp-for="EmployeeID"/>
+            <input type="submit" value="Delete" class="btn btn-danger"/>
+            <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
+        </form>
+    </div>
+</div> 

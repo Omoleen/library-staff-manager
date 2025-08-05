@@ -1,0 +1,43 @@
+@model StaffManagementN.Models.UpdateShiftDto
+
+@{
+    ViewData["Title"] = "Edit Shift";
+}
+
+<h1 class="h3 mb-2 text-gray-800">Edit Shift</h1>
+<p class="mb-4">Update the details for this shift.</p>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Shift Details</h6>
+    </div>
+    <div class="card-body">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="StartDateTime" class="control-label"></label>
+                        <input asp-for="StartDateTime" class="form-control" />
+                        <span asp-validation-for="StartDateTime" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="EndDateTime" class="control-label"></label>
+                        <input asp-for="EndDateTime" class="form-control" />
+                        <span asp-validation-for="EndDateTime" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group mt-4">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

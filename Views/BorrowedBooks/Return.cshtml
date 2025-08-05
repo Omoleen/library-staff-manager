@@ -1,0 +1,112 @@
+@model StaffManagementN.Models.BorrowedBookModel
+
+@{
+    ViewData["Title"] = "Return Book";
+    var currentShift = ViewBag.CurrentShift as StaffManagementN.Models.ShiftModel;
+    var currentShiftEmployees = ViewBag.CurrentShiftEmployees as IEnumerable<StaffManagementN.Models.EmployeeDto>;
+    var allEmployees = ViewBag.Employees as IEnumerable<StaffManagementN.Models.EmployeeDto>;
+}
+
+<h1 class="h3 mb-2 text-gray-800">Return Book</h1>
+<p class="mb-4">Process the return of "@Model.Book.Title".</p>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Return Details</h6>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="mb-3">Book Information</h5>
+                <dl class="row">
+                    <dt class="col-sm-4">Title</dt>
+                    <dd class="col-sm-8">@Model.Book.Title</dd>
+                    <dt class="col-sm-4">Author</dt>
+                    <dd class="col-sm-8">@Model.Book.Author</dd>
+                    <dt class="col-sm-4">ISBN</dt>
+                    <dd class="col-sm-8">@Model.Book.ISBN</dd>
+                </dl>
+
+                <h5 class="mb-3 mt-4">Borrowing Details</h5>
+                <dl class="row">
+                    <dt class="col-sm-4">Borrowed By</dt>
+                    <dd class="col-sm-8">@Model.Member.FirstName @Model.Member.LastName</dd>
+                    <dt class="col-sm-4">Borrow Date</dt>
+                    <dd class="col-sm-8">@Model.BorrowDate.ToString("g")</dd>
+                    <dt class="col-sm-4">Due Date</dt>
+                    <dd class="col-sm-8">
+                        @Model.DueDate.ToString("g")
+                        @if (DateTime.Now > Model.DueDate)
+                        {
+                            <span class="badge bg-danger ms-2">Overdue</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+
+            <div class="col-md-6">
+                <form asp-action="Return" method="post">
+                    <input type="hidden" name="id" value="@Model.BorrowId" />
+
+                    <h5 class="mb-3">Return Processing</h5>
+
+                    @if (currentShift != null)
+                    {
+                        <div class="alert alert-info">
+                            <strong>Current Shift:</strong> @currentShift.StartDateTime.ToString("g") - @currentShift.EndDateTime.ToString("g")
+                        </div>
+
+                        @if (currentShiftEmployees?.Any() == true)
+                        {
+                            <div class="form-group mb-4">
+                                <label class="form-label">Select Receiving Employee (Current Shift)</label>
+                                <select name="receivedByEmployeeId" class="form-control">
+                                    <option value="">Select an employee...</option>
+                                    @foreach (var employee in currentShiftEmployees)
+                                    {
+                                        <option value="@employee.EmployeeID">
+                                            @employee.FirstName @employee.LastName - @employee.Role
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning">
+                                No employees are assigned to the current shift.
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            No active shift at the moment.
+                        </div>
+                    }
+
+                    <div class="form-group mb-4">
+                        <label class="form-label">Select Receiving Employee (All Employees)</label>
+                        <select name="receivedByEmployeeId" class="form-control" required>
+                            <option value="">Select an employee...</option>
+                            @foreach (var employee in allEmployees)
+                            {
+                                <option value="@employee.EmployeeID">
+                                    @employee.FirstName @employee.LastName - @employee.Role
+                                </option>
+                            }
+                        </select>
+                        <div class="form-text text-muted">
+                            Select the employee who is processing this return.
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success">Process Return</button>
+                        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> 

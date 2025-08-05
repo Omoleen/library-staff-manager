@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - StaffManagementN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/StaffManagementN.styles.css" asp-append-version="true"/>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a class="sidebar-brand" asp-area="" asp-controller="Home" asp-action="Index">StaffManagementN</a>
+        </div>
+        <ul class="sidebar-nav">
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="sidebar-header">Staff Management</li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-area="" asp-controller="Employee" asp-action="Index">Employees</a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-area="" asp-controller="Shift" asp-action="Index">Shifts</a>
+            </li>
+            <li class="sidebar-header">Library Management</li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-area="" asp-controller="Books" asp-action="Index">Books</a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-area="" asp-controller="Members" asp-action="Index">Members</a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-area="" asp-controller="BorrowedBooks" asp-action="Index">Borrowed Books</a>
+            </li>
+            <li class="sidebar-header">Other</li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <partial name="_LoginPartial"/>
+        </div>
+    </div>
+    <div class="main-content">
+        <main role="main" class="pb-3">
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+        </main>
+        <footer class="border-top footer text-muted">
+            <div class="container-fluid">
+                &copy; 2025 - StaffManagementN - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>
+    </div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

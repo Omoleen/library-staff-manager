@@ -1,0 +1,79 @@
+@model StaffManagementN.Models.ShiftDetailsViewModel
+
+@{
+    ViewData["Title"] = "Shift Details";
+}
+
+<h1 class="h3 mb-2 text-gray-800">Shift Details</h1>
+<p class="mb-4">Details for shift starting at @Model.Shift.StartDateTime.ToString("g").</p>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Shift Information</h6>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Start Time</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Shift.StartDateTime)</dd>
+                    <dt class="col-sm-4">End Time</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Shift.EndDateTime)</dd>
+                </dl>
+                <a asp-action="Edit" asp-route-id="@Model.Shift.ShiftID" class="btn btn-primary">Edit</a>
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Assign Employee</h6>
+            </div>
+            <div class="card-body">
+                <form asp-action="AssignEmployee" method="post">
+                    <input type="hidden" name="shiftId" value="@Model.Shift.ShiftID"/>
+                    <div class="form-group">
+                        <select name="employeeId" class="form-control" asp-items="@(new SelectList(Model.AvailableEmployees, "EmployeeID", "FullName"))"></select>
+                    </div>
+                    <div class="form-group mt-3">
+                        <input type="submit" value="Assign" class="btn btn-primary"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Assigned Employees</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in Model.AssignedEmployees)
+                        {
+                            <tr>
+                                <td>@item.FirstName @item.LastName</td>
+                                <td>
+                                    <form asp-action="UnassignEmployee" method="post" style="display:inline;">
+                                        <input type="hidden" name="shiftId" value="@Model.Shift.ShiftID"/>
+                                        <input type="hidden" name="employeeId" value="@item.EmployeeID"/>
+                                        <button type="submit" class="btn btn-danger btn-sm">Unassign</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
