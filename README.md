@@ -123,11 +123,11 @@ To get a local copy up and running, follow these simple steps.
 
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/Omoleen/StaffManager
+   git clone https://github.com/Omoleen/library-staff-manager
    ```
 2. **Navigate to the project directory:**
    ```sh
-   cd StaffManager
+   cd library-staff-manager
    ```
 3. **Restore dependencies:**
    ```sh
