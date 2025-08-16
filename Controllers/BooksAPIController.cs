@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using StaffManagementN.Interfaces;
 using StaffManagementN.Models;
 
@@ -6,6 +7,7 @@ namespace StaffManagementN.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = "Admin")]
 public class BooksAPIController : ControllerBase
 {
     private readonly IBookService _bookService;
