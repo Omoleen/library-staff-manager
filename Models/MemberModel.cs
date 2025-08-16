@@ -15,6 +15,8 @@ public class MemberModel
 
     public int PhoneNumber { get; set; }
 
+    public string? ImagePath { get; set; }
+
     // A member can borrow many books
     public virtual ICollection<BorrowedBookModel>? BorrowedBooks { get; set; }
 } 

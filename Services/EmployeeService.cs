@@ -23,7 +23,8 @@ namespace StaffManagementN.Services
                 FirstName = e.FirstName,
                 LastName = e.LastName,
                 Email = e.Email,
-                Role = e.Role
+                Role = e.Role,
+                ImagePath = e.ImagePath
             });
         }
 
@@ -40,7 +41,8 @@ namespace StaffManagementN.Services
                 FirstName = e.FirstName,
                 LastName = e.LastName,
                 Email = e.Email,
-                Role = e.Role
+                Role = e.Role,
+                ImagePath = e.ImagePath
             };
         }
 
@@ -58,7 +60,8 @@ namespace StaffManagementN.Services
                 Email = e.Email,
                 Role = e.Role,
                 HourlyRate = e.HourlyRate,
-                DateHired = e.DateHired
+                DateHired = e.DateHired,
+                ImagePath = e.ImagePath
             };
         }
 
@@ -71,7 +74,8 @@ namespace StaffManagementN.Services
                 Email = dto.Email,
                 Role = dto.Role,
                 HourlyRate = dto.HourlyRate,
-                DateHired = dto.DateHired
+                DateHired = dto.DateHired,
+                ImagePath = dto.ImagePath
             };
             _context.Employees.Add(employeeModel);
             await _context.SaveChangesAsync();
@@ -81,7 +85,8 @@ namespace StaffManagementN.Services
                 FirstName = employeeModel.FirstName,
                 LastName = employeeModel.LastName,
                 Email = employeeModel.Email,
-                Role = employeeModel.Role
+                Role = employeeModel.Role,
+                ImagePath = employeeModel.ImagePath
             };
             return resultDto;
         }
@@ -100,6 +105,7 @@ namespace StaffManagementN.Services
             employeeModel.Role = dto.Role;
             employeeModel.HourlyRate = dto.HourlyRate;
             employeeModel.DateHired = dto.DateHired;
+            employeeModel.ImagePath = dto.ImagePath;
 
             _context.Entry(employeeModel).State = EntityState.Modified;
             try
@@ -144,7 +150,8 @@ namespace StaffManagementN.Services
                     FirstName = es.Employee.FirstName,
                     LastName = es.Employee.LastName,
                     Email = es.Employee.Email,
-                    Role = es.Employee.Role
+                    Role = es.Employee.Role,
+                    ImagePath = es.Employee.ImagePath
                 })
                 .ToListAsync();
 

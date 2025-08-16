@@ -12,7 +12,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Member Details</h6>
     </div>
     <div class="card-body">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="row">
                 <div class="col-md-6">
@@ -43,6 +43,14 @@
                         <label asp-for="PhoneNumber" class="control-label"></label>
                         <input asp-for="PhoneNumber" class="form-control" />
                         <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="imageFile" class="control-label">Profile Picture</label>
+                        <input type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*" />
                     </div>
                 </div>
             </div>

@@ -8,4 +8,5 @@ public class UpdateEmployeeDto
     public string Role { get; set; }
     public decimal HourlyRate { get; set; }
     public DateTime DateHired { get; set; }
+    public string? ImagePath { get; set; }
 } 

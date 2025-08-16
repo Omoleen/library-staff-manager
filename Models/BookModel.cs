@@ -15,6 +15,8 @@ public class BookModel
 
     public string Status { get; set; }
 
+    public string? ImagePath { get; set; }
+
     // A book can be borrowed many times
     public virtual ICollection<BorrowedBookModel>? BorrowedBooks { get; set; }
 } 

@@ -8,11 +8,16 @@ public class BooksController : Controller
 {
     private readonly IBookService _bookService;
     private readonly IBorrowedBookService _borrowedBookService;
+    private readonly IFileService _fileService;
+    private readonly ILogger<BooksController> _logger;
 
-    public BooksController(IBookService bookService, IBorrowedBookService borrowedBookService)
+    public BooksController(IBookService bookService, IBorrowedBookService borrowedBookService, 
+        IFileService fileService, ILogger<BooksController> logger)
     {
         _bookService = bookService;
         _borrowedBookService = borrowedBookService;
+        _fileService = fileService;
+        _logger = logger;
     }
 
     // GET: Books
@@ -43,10 +48,15 @@ public class BooksController : Controller
     // POST: Books/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(BookModel book)
+    public async Task<IActionResult> Create(BookModel book, IFormFile? imageFile)
     {
         if (ModelState.IsValid)
         {
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                book.ImagePath = await _fileService.UploadFileAsync(imageFile, "books");
+            }
+
             await _bookService.CreateBookAsync(book);
             return RedirectToAction(nameof(Index));
         }
@@ -67,18 +77,49 @@ public class BooksController : Controller
     // POST: Books/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, BookModel book)
+    public async Task<IActionResult> Edit(int id, BookModel book, IFormFile? imageFile)
     {
         if (ModelState.IsValid)
         {
             try
             {
+                // Get the current book to preserve the image path if no new image is uploaded
+                var currentBook = await _bookService.GetBookByIdAsync(id);
+                if (currentBook == null)
+                {
+                    return NotFound();
+                }
+
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    // Delete the old image if it exists
+                    if (!string.IsNullOrEmpty(currentBook.ImagePath))
+                    {
+                        await _fileService.DeleteFileAsync(currentBook.ImagePath);
+                    }
+
+                    // Upload the new image
+                    book.ImagePath = await _fileService.UploadFileAsync(imageFile, "books");
+                    _logger.LogInformation("New image uploaded for book {BookId}: {ImagePath}", id, book.ImagePath);
+                }
+                else
+                {
+                    // Preserve the existing image path if no new image is uploaded
+                    book.ImagePath = currentBook.ImagePath;
+                    _logger.LogInformation("Preserving existing image for book {BookId}: {ImagePath}", id, book.ImagePath);
+                }
+
                 await _bookService.UpdateBookAsync(id, book);
                 return RedirectToAction(nameof(Index));
             }
             catch (KeyNotFoundException)
             {
                 return NotFound();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating book {BookId}", id);
+                ModelState.AddModelError("", "An error occurred while updating the book. Please try again.");
             }
         }
         return View(book);
@@ -102,6 +143,12 @@ public class BooksController : Controller
     {
         try
         {
+            var book = await _bookService.GetBookByIdAsync(id);
+            if (book != null && !string.IsNullOrEmpty(book.ImagePath))
+            {
+                await _fileService.DeleteFileAsync(book.ImagePath);
+            }
+
             await _bookService.DeleteBookAsync(id);
             return RedirectToAction(nameof(Index));
         }
