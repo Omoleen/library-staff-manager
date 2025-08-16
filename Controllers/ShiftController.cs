@@ -5,6 +5,11 @@ using StaffManagementN.Models;
 
 namespace StaffManagementN.Controllers
 {
+    /// <summary>
+    /// Controller responsible for managing work shifts through the web interface.
+    /// Provides functionality for CRUD operations on shifts and managing employee assignments.
+    /// This controller requires Admin role authorization for all actions.
+    /// </summary>
     [Authorize(Roles = "Admin")]
     public class ShiftController : Controller
     {
@@ -12,6 +17,12 @@ namespace StaffManagementN.Controllers
         private readonly IEmployeeService _employeeService;
         private readonly IEmployeeShiftService _employeeShiftService;
 
+        /// <summary>
+        /// Initializes a new instance of the ShiftController with required services.
+        /// </summary>
+        /// <param name="shiftService">Service for managing shift data</param>
+        /// <param name="employeeService">Service for managing employee data</param>
+        /// <param name="employeeShiftService">Service for managing employee-shift relationships</param>
         public ShiftController(IShiftService shiftService, IEmployeeService employeeService, IEmployeeShiftService employeeShiftService)
         {
             _shiftService = shiftService;
@@ -19,14 +30,21 @@ namespace StaffManagementN.Controllers
             _employeeShiftService = employeeShiftService;
         }
 
-        // GET: Shift
+        /// <summary>
+        /// Displays a list of all shifts in the system.
+        /// </summary>
+        /// <returns>A view containing a list of all shifts</returns>
         public async Task<IActionResult> Index()
         {
             var shifts = await _shiftService.GetShifts();
             return View(shifts);
         }
 
-        // GET: Shift/Details/5
+        /// <summary>
+        /// Displays detailed information about a specific shift, including assigned and available employees.
+        /// </summary>
+        /// <param name="id">The ID of the shift to display</param>
+        /// <returns>A view containing detailed shift information and employee assignments</returns>
         public async Task<IActionResult> Details(int id)
         {
             var shift = await _shiftService.GetShift(id);
@@ -49,7 +67,12 @@ namespace StaffManagementN.Controllers
             return View(viewModel);
         }
         
-        // POST: Shift/AssignEmployee
+        /// <summary>
+        /// Assigns an employee to a shift.
+        /// </summary>
+        /// <param name="shiftId">The ID of the shift</param>
+        /// <param name="employeeId">The ID of the employee to assign</param>
+        /// <returns>Redirects to the shift's Details page after successful assignment</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AssignEmployee(int shiftId, int employeeId)

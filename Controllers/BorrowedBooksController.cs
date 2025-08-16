@@ -5,6 +5,11 @@ using StaffManagementN.Models;
 
 namespace StaffManagementN.Controllers;
 
+/// <summary>
+/// Controller responsible for managing book borrowing records through the web interface.
+/// Provides functionality for tracking book loans, returns, and managing borrowing history.
+/// This controller requires Admin role authorization for all actions.
+/// </summary>
 [Authorize(Roles = "Admin")]
 public class BorrowedBooksController : Controller
 {
@@ -14,6 +19,14 @@ public class BorrowedBooksController : Controller
     private readonly IShiftService _shiftService;
     private readonly IEmployeeService _employeeService;
 
+    /// <summary>
+    /// Initializes a new instance of the BorrowedBooksController with required services.
+    /// </summary>
+    /// <param name="borrowedBookService">Service for managing borrowed book records</param>
+    /// <param name="bookService">Service for managing book data</param>
+    /// <param name="memberService">Service for managing member data</param>
+    /// <param name="shiftService">Service for managing shift data</param>
+    /// <param name="employeeService">Service for managing employee data</param>
     public BorrowedBooksController(
         IBorrowedBookService borrowedBookService, 
         IBookService bookService, 
@@ -28,14 +41,21 @@ public class BorrowedBooksController : Controller
         _employeeService = employeeService;
     }
 
-    // GET: BorrowedBooks
+    /// <summary>
+    /// Displays a list of all borrowed books in the system.
+    /// </summary>
+    /// <returns>A view containing a list of all borrowed books</returns>
     public async Task<IActionResult> Index()
     {
         var borrowedBooks = await _borrowedBookService.GetAllBorrowedBooksAsync();
         return View(borrowedBooks);
     }
 
-    // GET: BorrowedBooks/Details/5
+    /// <summary>
+    /// Displays detailed information about a specific borrowed book record.
+    /// </summary>
+    /// <param name="id">The ID of the borrowed book record to display</param>
+    /// <returns>A view containing detailed borrowed book information</returns>
     public async Task<IActionResult> Details(int id)
     {
         var borrowedBook = await _borrowedBookService.GetBorrowedBookByIdAsync(id);
@@ -47,7 +67,14 @@ public class BorrowedBooksController : Controller
         return View(borrowedBook);
     }
 
-    // GET: BorrowedBooks/Create
+    /// <summary>
+    /// Displays the form for creating a new borrowed book record.
+    /// Optionally pre-fills the form with member and book information.
+    /// Also provides information about current shift and available employees.
+    /// </summary>
+    /// <param name="memberId">Optional ID of the member who is borrowing the book</param>
+    /// <param name="bookId">Optional ID of the book being borrowed</param>
+    /// <returns>A view containing the borrowed book creation form</returns>
     public async Task<IActionResult> Create(int? memberId = null, int? bookId = null)
     {
         ViewBag.Books = await _bookService.GetAllBooksAsync();
@@ -97,7 +124,12 @@ public class BorrowedBooksController : Controller
         return View(model);
     }
 
-    // POST: BorrowedBooks/Create
+    /// <summary>
+    /// Processes the creation of a new borrowed book record.
+    /// Automatically assigns the current shift if none is specified.
+    /// </summary>
+    /// <param name="borrowedBook">The borrowed book record to create</param>
+    /// <returns>Redirects to the appropriate view based on context (member details, book details, or index)</returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(BorrowedBookModel borrowedBook)
@@ -136,7 +168,11 @@ public class BorrowedBooksController : Controller
         return View(borrowedBook);
     }
 
-    // GET: BorrowedBooks/Edit/5
+    /// <summary>
+    /// Displays the form for editing an existing borrowed book record.
+    /// </summary>
+    /// <param name="id">The ID of the borrowed book record to edit</param>
+    /// <returns>A view containing the borrowed book edit form</returns>
     public async Task<IActionResult> Edit(int id)
     {
         var borrowedBook = await _borrowedBookService.GetBorrowedBookByIdAsync(id);
@@ -151,7 +187,12 @@ public class BorrowedBooksController : Controller
         return View(borrowedBook);
     }
 
-    // POST: BorrowedBooks/Edit/5
+    /// <summary>
+    /// Processes the update of an existing borrowed book record.
+    /// </summary>
+    /// <param name="id">The ID of the borrowed book record to update</param>
+    /// <param name="borrowedBook">The updated borrowed book information</param>
+    /// <returns>Redirects to the Index action if successful, otherwise returns to the edit form with validation errors</returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, BorrowedBookModel borrowedBook)
@@ -175,7 +216,11 @@ public class BorrowedBooksController : Controller
         return View(borrowedBook);
     }
 
-    // GET: BorrowedBooks/Delete/5
+    /// <summary>
+    /// Displays the confirmation page for deleting a borrowed book record.
+    /// </summary>
+    /// <param name="id">The ID of the borrowed book record to delete</param>
+    /// <returns>A view containing the borrowed book deletion confirmation</returns>
     public async Task<IActionResult> Delete(int id)
     {
         var borrowedBook = await _borrowedBookService.GetBorrowedBookByIdAsync(id);
@@ -186,7 +231,11 @@ public class BorrowedBooksController : Controller
         return View(borrowedBook);
     }
 
-    // POST: BorrowedBooks/Delete/5
+    /// <summary>
+    /// Processes the deletion of a borrowed book record.
+    /// </summary>
+    /// <param name="id">The ID of the borrowed book record to delete</param>
+    /// <returns>Redirects to the appropriate view based on context (member details or index)</returns>
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
@@ -210,7 +259,12 @@ public class BorrowedBooksController : Controller
         }
     }
 
-    // GET: BorrowedBooks/Return/5
+    /// <summary>
+    /// Displays the form for recording a book return.
+    /// Provides information about current shift and available employees.
+    /// </summary>
+    /// <param name="id">The ID of the borrowed book record to process return for</param>
+    /// <returns>A view containing the book return form</returns>
     public async Task<IActionResult> Return(int id)
     {
         var borrowedBook = await _borrowedBookService.GetBorrowedBookByIdAsync(id);
@@ -236,7 +290,13 @@ public class BorrowedBooksController : Controller
         return View(borrowedBook);
     }
 
-    // POST: BorrowedBooks/Return/5
+    /// <summary>
+    /// Processes the return of a borrowed book.
+    /// Automatically assigns the current shift and receiving employee to the return record.
+    /// </summary>
+    /// <param name="id">The ID of the borrowed book record to process return for</param>
+    /// <param name="receivedByEmployeeId">The ID of the employee receiving the returned book</param>
+    /// <returns>Redirects to the appropriate view based on context (member details or index)</returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Return(int id, int receivedByEmployeeId)

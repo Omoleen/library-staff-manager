@@ -5,6 +5,11 @@ using StaffManagementN.Models;
 
 namespace StaffManagementN.Controllers;
 
+/// <summary>
+/// API controller for managing library books through RESTful endpoints.
+/// Provides CRUD operations for book management through API calls.
+/// This controller requires Admin role authorization for all endpoints.
+/// </summary>
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(Roles = "Admin")]
@@ -12,12 +17,20 @@ public class BooksAPIController : ControllerBase
 {
     private readonly IBookService _bookService;
 
+    /// <summary>
+    /// Initializes a new instance of the BooksAPIController.
+    /// </summary>
+    /// <param name="bookService">The service for managing book data</param>
     public BooksAPIController(IBookService bookService)
     {
         _bookService = bookService;
     }
 
-    // GET: api/BooksAPI
+    /// <summary>
+    /// Retrieves all books in the library.
+    /// </summary>
+    /// <returns>A list of all books with their details</returns>
+    /// <response code="200">Returns the list of books</response>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<BookModel>>> GetBooks()
     {
@@ -25,7 +38,13 @@ public class BooksAPIController : ControllerBase
         return Ok(books);
     }
 
-    // GET: api/BooksAPI/5
+    /// <summary>
+    /// Retrieves a specific book by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the book to retrieve</param>
+    /// <returns>The book details</returns>
+    /// <response code="200">Returns the requested book</response>
+    /// <response code="404">If the book is not found</response>
     [HttpGet("{id}")]
     public async Task<ActionResult<BookModel>> GetBook(int id)
     {
@@ -40,7 +59,15 @@ public class BooksAPIController : ControllerBase
         }
     }
 
-    // PUT: api/BooksAPI/5
+    /// <summary>
+    /// Updates an existing book's information.
+    /// </summary>
+    /// <param name="id">The ID of the book to update</param>
+    /// <param name="book">The updated book information</param>
+    /// <returns>No content if successful</returns>
+    /// <response code="204">If the book was successfully updated</response>
+    /// <response code="400">If the book data is invalid</response>
+    /// <response code="404">If the book is not found</response>
     [HttpPut("{id}")]
     public async Task<IActionResult> PutBook(int id, BookModel book)
     {
@@ -59,7 +86,13 @@ public class BooksAPIController : ControllerBase
         }
     }
 
-    // POST: api/BooksAPI
+    /// <summary>
+    /// Creates a new book in the library.
+    /// </summary>
+    /// <param name="book">The book information to create</param>
+    /// <returns>The newly created book</returns>
+    /// <response code="201">Returns the newly created book</response>
+    /// <response code="400">If the book data is invalid</response>
     [HttpPost]
     public async Task<ActionResult<BookModel>> PostBook(BookModel book)
     {
@@ -67,7 +100,13 @@ public class BooksAPIController : ControllerBase
         return CreatedAtAction("GetBook", new { id = createdBook.BookId }, createdBook);
     }
 
-    // DELETE: api/BooksAPI/5
+    /// <summary>
+    /// Deletes a specific book from the library.
+    /// </summary>
+    /// <param name="id">The ID of the book to delete</param>
+    /// <returns>No content if successful</returns>
+    /// <response code="204">If the book was successfully deleted</response>
+    /// <response code="404">If the book is not found</response>
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBook(int id)
     {

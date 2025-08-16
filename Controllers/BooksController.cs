@@ -5,6 +5,11 @@ using StaffManagementN.Models;
 
 namespace StaffManagementN.Controllers;
 
+/// <summary>
+/// Controller responsible for managing library books through the web interface.
+/// Provides functionality for CRUD operations on books, including book cover image management.
+/// This controller requires Admin role authorization for all actions.
+/// </summary>
 [Authorize(Roles = "Admin")]
 public class BooksController : Controller
 {
@@ -13,6 +18,13 @@ public class BooksController : Controller
     private readonly IFileService _fileService;
     private readonly ILogger<BooksController> _logger;
 
+    /// <summary>
+    /// Initializes a new instance of the BooksController with required services.
+    /// </summary>
+    /// <param name="bookService">Service for managing book data</param>
+    /// <param name="borrowedBookService">Service for managing book borrowing records</param>
+    /// <param name="fileService">Service for handling file operations</param>
+    /// <param name="logger">Logger for the BooksController</param>
     public BooksController(IBookService bookService, IBorrowedBookService borrowedBookService, 
         IFileService fileService, ILogger<BooksController> logger)
     {
@@ -22,14 +34,21 @@ public class BooksController : Controller
         _logger = logger;
     }
 
-    // GET: Books
+    /// <summary>
+    /// Displays a list of all books in the library.
+    /// </summary>
+    /// <returns>A view containing a list of all books</returns>
     public async Task<IActionResult> Index()
     {
         var books = await _bookService.GetAllBooksAsync();
         return View(books);
     }
 
-    // GET: Books/Details/5
+    /// <summary>
+    /// Displays detailed information about a specific book.
+    /// </summary>
+    /// <param name="id">The ID of the book to display</param>
+    /// <returns>A view containing detailed book information</returns>
     public async Task<IActionResult> Details(int id)
     {
         var book = await _bookService.GetBookByIdAsync(id);
@@ -41,13 +60,21 @@ public class BooksController : Controller
         return View(book);
     }
 
-    // GET: Books/Create
+    /// <summary>
+    /// Displays the form for adding a new book to the library.
+    /// </summary>
+    /// <returns>A view containing the book creation form</returns>
     public IActionResult Create()
     {
         return View();
     }
 
-    // POST: Books/Create
+    /// <summary>
+    /// Processes the creation of a new book, including handling of book cover image upload.
+    /// </summary>
+    /// <param name="book">The book model containing the new book's information</param>
+    /// <param name="imageFile">Optional cover image file for the book</param>
+    /// <returns>Redirects to the Index action if successful, otherwise returns to the creation form with validation errors</returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(BookModel book, IFormFile? imageFile)
@@ -65,7 +92,11 @@ public class BooksController : Controller
         return View(book);
     }
 
-    // GET: Books/Edit/5
+    /// <summary>
+    /// Displays the form for editing an existing book's information.
+    /// </summary>
+    /// <param name="id">The ID of the book to edit</param>
+    /// <returns>A view containing the book edit form</returns>
     public async Task<IActionResult> Edit(int id)
     {
         var book = await _bookService.GetBookByIdAsync(id);
@@ -76,7 +107,13 @@ public class BooksController : Controller
         return View(book);
     }
 
-    // POST: Books/Edit/5
+    /// <summary>
+    /// Processes the update of an existing book's information, including handling of book cover image updates.
+    /// </summary>
+    /// <param name="id">The ID of the book to update</param>
+    /// <param name="book">The book model containing the updated information</param>
+    /// <param name="imageFile">Optional new cover image file for the book</param>
+    /// <returns>Redirects to the Index action if successful, otherwise returns to the edit form with validation errors</returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, BookModel book, IFormFile? imageFile)
@@ -127,7 +164,11 @@ public class BooksController : Controller
         return View(book);
     }
 
-    // GET: Books/Delete/5
+    /// <summary>
+    /// Displays the confirmation page for deleting a book.
+    /// </summary>
+    /// <param name="id">The ID of the book to delete</param>
+    /// <returns>A view containing the book deletion confirmation</returns>
     public async Task<IActionResult> Delete(int id)
     {
         var book = await _bookService.GetBookByIdAsync(id);
@@ -138,7 +179,11 @@ public class BooksController : Controller
         return View(book);
     }
 
-    // POST: Books/Delete/5
+    /// <summary>
+    /// Processes the deletion of a book, including removal of its cover image.
+    /// </summary>
+    /// <param name="id">The ID of the book to delete</param>
+    /// <returns>Redirects to the Index action after successful deletion</returns>
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
